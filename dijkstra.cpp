@@ -26,11 +26,14 @@ void Dijkstra::search(Grid& graph,
             return best_item;
         }
     } frontier;
-    int i=0;
+    int i=0, j=0;
     frontier.put(start, 0);
 
     came_from[start] = start;
     cost_so_far[start] = 0;
+
+    int n = graph.getSize().x * graph.getSize().y;
+    n = sqrt(n);
 
     while (!frontier.empty()) {
         SqPos current = frontier.get();
@@ -38,7 +41,9 @@ void Dijkstra::search(Grid& graph,
         if (current == goal || cost_so_far.find(goal) != cost_so_far.end()) {
             break;
         }
-        graph.drawGridViaSVG(to_string(i++), &cost_so_far);
+        if (n == j)
+            graph.drawGridViaSVG(to_string(i), &cost_so_far), j=0;
+        i++;j++;
         for (SqElem next : graph.neighbors(current))
         {
             int new_cost = cost_so_far[current] + next.w;

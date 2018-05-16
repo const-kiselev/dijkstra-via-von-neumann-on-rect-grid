@@ -38,7 +38,7 @@ typedef struct SqElem{
 class Grid {
     int sq_x_size; // кол-во квадратов по горизонтали
     int sq_y_size; // кол-во квадратов по вертикали
-    int sq_size; // размер квадрата для отрисовки
+    float sq_size; // размер квадрата для отрисовки
     std::vector<int> squares; // вектор с весами
     double width;
     double height;
@@ -52,6 +52,8 @@ public:
                         map<SqPos, int>* cost_so_far = nullptr,
                         map<SqPos, int> path = {});
     vector<SqElem> neighbors(SqPos pos);
+
+    SqPos getSize(){return SqPos(sq_x_size, sq_y_size);}
 };
 
 

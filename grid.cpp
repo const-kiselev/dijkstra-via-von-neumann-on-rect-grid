@@ -6,12 +6,13 @@ Grid::Grid(int x_size, int y_size): sq_x_size(x_size), sq_y_size(y_size)
     int n = sq_x_size*sq_y_size;
     for(int i=0; i<n; i++)
         squares.push_back(rand()%506);
-    sq_size = 20;
+    sq_size = 1000.0/max(sq_x_size, sq_y_size);
 }
 
 void Grid::drawGridViaSVG(string fileName,
                           map<SqPos, int>* cost_so_far ,map<SqPos, int> path)
 {
+
     Document * doc = new Document(fileName+".svg", Layout(Dimensions(1000,1000), Layout::TopLeft));
     int n = sq_x_size*sq_y_size;
     for(int i=0; i<n; i++){
@@ -31,7 +32,7 @@ void Grid::drawGridViaSVG(string fileName,
                      std::to_string(sq.x)+", "+
                      std::to_string(sq.y)+", "+
                      std::to_string(squares[i]),
-                     Color::Black, Font(3, "Arial"));
+                     Color::Black, Font(sq_size/5, "Arial"));
     }
     doc->save();
 }
