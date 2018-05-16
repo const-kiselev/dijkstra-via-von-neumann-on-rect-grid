@@ -3,6 +3,6 @@
 int main() {
     srand(time(NULL));
     Grid g(10,10);
-    g.drawGrid();
+    Dijkstra::search(g, SqPos(0,0), SqPos(5,5));
     return 0;
 }

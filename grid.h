@@ -1,5 +1,5 @@
-#ifndef DIJKSTRA_VIA_VON_NEUMANN_ON_RECT_GRID_GRID_H
-#define DIJKSTRA_VIA_VON_NEUMANN_ON_RECT_GRID_GRID_H
+#ifndef GRID_H
+#define GRID_H
 
 #include <iostream>
 #include "simple_svg_1.0.0_mod.hpp"
@@ -11,29 +11,48 @@
 #include <queue>
 
 using namespace svg;
+using namespace std;
 
+// структура для описания позиции квадрата
+// относительно левого верхнего угла
+typedef struct SqPos {
+    int x,y;
+    SqPos(){}
+    SqPos(int inX, int inY):x(inX), y(inY){}
 
-typedef struct {int x,y;} SqPos;
-typedef struct {int x,y,w;} SqElem;
+    const bool operator == (const SqPos a) const
+    {return ((this->x == a.x) &&  (this->y == a.y));}
+    const bool operator != (const SqPos a)const
+    {return !(*this == a);}
+    const bool operator < (const SqPos a)const
+    {return std::tie(a.x, a.y) < std::tie(this->x, this->y);}
+};
+
+// структура для описания квадрата (позиция [x,y] и вес w)
+typedef struct SqElem{
+    int x,y,w;
+    SqElem(int inX, int inY, int inW):
+            x(inX), y(inY), w(inW){}
+};
 
 class Grid {
-    int sq_x_size;
-    int sq_y_size;
-    int sq_size;
-    std::vector<int> squares;
+    int sq_x_size; // кол-во квадратов по горизонтали
+    int sq_y_size; // кол-во квадратов по вертикали
+    int sq_size; // размер квадрата для отрисовки
+    std::vector<int> squares; // вектор с весами
     double width;
     double height;
-    Document *doc;
+    int index(int x, int y){return x*sq_x_size+y;}
 
 public:
     Grid(int x_size, int y_size);
     ~Grid(){};
 
-    void fill_sq(Point sq, Color color);
-    void drawGrid();
-    void newDoc(std::string fileName);
-    void saveDoc();
+    void drawGridViaSVG(string fileName,
+                        map<SqPos, int>* cost_so_far = nullptr,
+                        map<SqPos, int> path = {});
+    vector<SqElem> neighbors(SqPos pos);
 };
 
 
-#endif //DIJKSTRA_VIA_VON_NEUMANN_ON_RECT_GRID_GRID_H
+#endif
